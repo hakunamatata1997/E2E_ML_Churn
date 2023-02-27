@@ -1,0 +1,74 @@
+schema: '2.0'
+stages:
+  raw_dataset_creation:
+    cmd: python ./src/data/load_data.py --config=params.yaml
+    deps:
+    - path: ./data/external/Churn_Prediction.csv
+      md5: 7321aa9a1e24a9e139f42124f736b415
+      size: 674857
+    - path: ./src/data/load_data.py
+      md5: 4a43bd22a142c77f117b6dde8e3451fc
+      size: 1314
+    outs:
+    - path: ./data/raw/Churn_Prediction.csv
+      md5: d9534fcf204e37ae58a7d7313ce4659c
+      size: 469203
+  split_data:
+    cmd: python ./src/data/split_data.py --config=params.yaml
+    deps:
+    - path: ./data/raw/Churn_Prediction.csv
+      md5: d9534fcf204e37ae58a7d7313ce4659c
+      size: 469203
+    - path: ./src/data/split_data.py
+      md5: f6191b05190b1b8e5bf4e4f6f96f679f
+      size: 1451
+    outs:
+    - path: ./data/processed/churn_test.csv
+      md5: 0fc6853dea827712941c41c40d564d1f
+      size: 80121
+    - path: ./data/processed/churn_train.csv
+      md5: c900296636fd3eb243a0d938c80750d7
+      size: 320132
+  preprocess:
+    cmd: python ./src/data/preprocess.py --config=params.yaml
+    deps:
+    - path: ./data/raw/Churn_Prediction.csv
+      md5: d9534fcf204e37ae58a7d7313ce4659c
+      size: 469203
+    - path: ./src/data/load_data.py
+      md5: 4a43bd22a142c77f117b6dde8e3451fc
+      size: 1314
+    outs:
+    - path: ./data/processed/processed_data.csv
+      md5: 487733dd81bed7f60072fc7a803fbf8f
+      size: 400114
+  model_train:
+    cmd: python ./src/models/train_model.py --config=params.yaml
+    deps:
+    - path: ./data/processed/churn_test.csv
+      md5: 0fc6853dea827712941c41c40d564d1f
+      size: 80121
+    - path: ./data/processed/churn_train.csv
+      md5: c900296636fd3eb243a0d938c80750d7
+      size: 320132
+    - path: ./src/models/train_model.py
+      md5: 3d23b58cd5f1d6401a99ec42c6ebdb6e
+      size: 3777
+    params:
+      params.yaml:
+        random_forest.max_depth: 10
+        random_forest.n_estimators: 30
+  log_production_model:
+    cmd: python ./src/models/model_selection.py --config=params.yaml
+    deps:
+    - path: ./src/models/model_selection.py
+      md5: 81e82e77ac288f6c85c80852793b75d7
+      size: 1991
+    params:
+      params.yaml:
+        random_forest.max_depth: 10
+        random_forest.n_estimators: 30
+    outs:
+    - path: ./models/model.joblib
+      md5: 373eea570549d4296132b0a34e1bad23
+      size: 1290928
