@@ -16,9 +16,9 @@ stages:
   split_data:
     cmd: python ./src/data/split_data.py --config=params.yaml
     deps:
-    - path: ./data/raw/Churn_Prediction.csv
-      md5: d9534fcf204e37ae58a7d7313ce4659c
-      size: 469203
+    - path: ./data/processed/processed_data.csv
+      md5: 487733dd81bed7f60072fc7a803fbf8f
+      size: 400114
     - path: ./src/data/split_data.py
       md5: f6191b05190b1b8e5bf4e4f6f96f679f
       size: 1451
@@ -35,9 +35,9 @@ stages:
     - path: ./data/raw/Churn_Prediction.csv
       md5: d9534fcf204e37ae58a7d7313ce4659c
       size: 469203
-    - path: ./src/data/load_data.py
-      md5: 4a43bd22a142c77f117b6dde8e3451fc
-      size: 1314
+    - path: ./src/data/preprocess.py
+      md5: 8eb8bd0424341b8cb118711a408c5313
+      size: 1533
     outs:
     - path: ./data/processed/processed_data.csv
       md5: 487733dd81bed7f60072fc7a803fbf8f
