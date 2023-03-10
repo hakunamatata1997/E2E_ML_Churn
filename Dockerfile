@@ -9,7 +9,8 @@ RUN pip install pyyaml
 
 COPY webapp .
 
-RUN pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache \
+    pip install -r requirements.txt
 
 EXPOSE 5555
 
