@@ -22,4 +22,7 @@ Werkzeug==1.0.1
 tensorflow-cpu
 dvc
 pyyaml
+<<<<<<< HEAD
 optuna
+=======
+>>>>>>> 86a518f06bbc164c3a05e147c03e0bfa1b2bb362

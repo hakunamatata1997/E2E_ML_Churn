@@ -12,6 +12,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import recall_score, roc_auc_score, classification_report
 from sklearn.ensemble import RandomForestClassifier
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 86a518f06bbc164c3a05e147c03e0bfa1b2bb362
 mlflow.set_tracking_uri("http://172.27.35.85:5000")
 mlflow.set_experiment("Churn_Experiment")
 
