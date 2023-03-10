@@ -3,9 +3,7 @@ pipeline {
   stages {
     stage('Preprocessing') {
       steps {
-        sh '''dvc repro raw_dataset_creation
-
-'''
+        sh '"dvc repro raw_dataset_creation"'
         sh 'dvc repro preprocess'
       }
     }
