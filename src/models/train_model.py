@@ -91,7 +91,7 @@ def train_and_evaluate(config_path):
             mlflow.sklearn.log_model(
                 model,
                 "model",
-                registered_model_name=mlflow_config["registered_model_name"])
+                registered_model_name=mlflow_config["registered_model_name"],)
         else:
             mlflow.sklearn.load_model(model, "model")
 

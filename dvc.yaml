@@ -21,11 +21,15 @@ stages:
     outs:
     - ./data/processed/churn_train.csv
     - ./data/processed/churn_test.csv
-  model_train:
-    cmd: python ./src/models/train_model.py --config=params.yaml
+  optimize:
+    cmd: python ./src/models/optimization.py --config=params.yaml
     deps:
     - ./data/processed/churn_train.csv
     - ./data/processed/churn_test.csv
+    - ./src/models/optimization.py
+  model_train:
+    cmd: python ./src/models/train_model.py --config=params.yaml
+    deps:
     - ./src/models/train_model.py
     params:
     - random_forest.max_depth

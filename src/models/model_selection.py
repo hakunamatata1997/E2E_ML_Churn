@@ -14,11 +14,11 @@ def log_production_model(config_path):
 
     mlflow.set_tracking_uri(remote_server_uri)
     # Load all runs from experiment
-    experiment_id = mlflow.get_experiment_by_name("model_iteration1").experiment_id
+    experiment_id = mlflow.get_experiment_by_name("Churn_Experiment").experiment_id
     all_runs = mlflow.search_runs(experiment_ids=experiment_id, order_by=["metrics.accuracy DESC"])
     # Best run
     best_run_id = all_runs.iloc[0].run_id
-    best_run = mlflow.get_run(run_id=best_run_id)
+    # best_run = mlflow.get_run(run_id=best_run_id)
     # runs = mlflow.search_runs(experiment_ids=1)
     # max_accuracy = max(runs["metrics.accuracy"])
     # max_accuracy_run_id = list(runs[runs["metrics.accuracy"] == max_accuracy]["run_id"])[0]
