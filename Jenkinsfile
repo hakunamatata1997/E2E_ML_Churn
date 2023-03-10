@@ -3,33 +3,38 @@ pipeline {
   stages {
     stage('Preprocessing') {
       steps {
-        dir(path: '/home/k8user/Akhil/mlops/mlflow/ChurnPrediction/')
-        sh 'dvc repro raw_dataset_creation'
-        sh 'dvc repro preprocess'
+        sh '''/home/k8user/anaconda3/bin/dvc
+ repro raw_dataset_creation'''
+        sh '''/home/k8user/anaconda3/bin/dvc
+ repro preprocess'''
       }
     }
 
     stage('Split') {
       steps {
-        sh 'dvc repro split_data'
+        sh '''/home/k8user/anaconda3/bin/dvc
+ repro split_data'''
       }
     }
 
     stage('Optimize Hyperparametre') {
       steps {
-        sh 'dvc repro   optimize'
+        sh '''/home/k8user/anaconda3/bin/dvc
+ repro   optimize'''
       }
     }
 
     stage('Train/Test') {
       steps {
-        sh 'dvc repro model_train'
+        sh '''/home/k8user/anaconda3/bin/dvc
+ repro model_train'''
       }
     }
 
-    stage('Log Model') {
+    stage('Register Model') {
       steps {
-        sh 'dvc repro log_production_model'
+        sh '''/home/k8user/anaconda3/bin/dvc
+ repro log_production_model'''
       }
     }
 
