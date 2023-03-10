@@ -12,7 +12,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import recall_score, roc_auc_score, classification_report
 from sklearn.ensemble import RandomForestClassifier
 
+
+mlflow.set_tracking_uri("http://172.27.35.85:5000")
 mlflow.set_experiment("Churn_Experiment")
+
 def read_params(config_path):
     """
     read parameters from the params.yaml file
@@ -53,7 +56,7 @@ def optimize(config_path):
     @mlflc.track_in_mlflow()
     def objective(trial):
         n_estimators = trial.suggest_int('n_estimators', 2, 12)
-        max_depth = int(trial.suggest_loguniform('max_depth', 1, 32))
+        max_depth = int(trial.suggest_int('max_depth', 1, 32))
         clf = sklearn.ensemble.RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth)
         mlflow.log_param("Optuna_trial_num", trial.number)
         return sklearn.model_selection.cross_val_score(clf, train_x, train_y,n_jobs=-1, cv=3).mean()
