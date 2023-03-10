@@ -2,6 +2,7 @@ pipeline {
   agent any
   stages {
     stage('Preprocessing') {
+      agent any
       steps {
         sh '''/home/k8user/anaconda3/bin/dvc
  repro raw_dataset_creation'''
