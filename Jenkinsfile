@@ -2,40 +2,54 @@ pipeline {
   agent any
   stages {
     stage('Preprocessing') {
-      agent any
-      steps {
-        sh '''/home/k8user/anaconda3/bin/dvc
- repro raw_dataset_creation'''
-        sh '''/home/k8user/anaconda3/bin/dvc
- repro preprocess'''
+      parallel {
+        stage('Data Pull') {
+          agent any
+          steps {
+            sh '''sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/
+'''
+            sh '/home/k8user/anaconda3/bin/dvc repro raw_dataset_creation'
+          }
+        }
+
+        stage('Dependencies') {
+          steps {
+            sh '''python3 -m pip install -r requirements.txt
+'''
+          }
+        }
+
+        stage('Preprocess') {
+          steps {
+            sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'
+            sh '''/home/k8user/anaconda3/bin/dvc repro preprocess'''
+          }
+        }
+
       }
     }
 
     stage('Split') {
       steps {
-        sh '''/home/k8user/anaconda3/bin/dvc
- repro split_data'''
+        sh '/home/k8user/anaconda3/bin/dvc repro split_data'
       }
     }
 
     stage('Optimize Hyperparametre') {
       steps {
-        sh '''/home/k8user/anaconda3/bin/dvc
- repro   optimize'''
+        sh '/home/k8user/anaconda3/bin/dvc repro optimize'
       }
     }
 
     stage('Train/Test') {
       steps {
-        sh '''/home/k8user/anaconda3/bin/dvc
- repro model_train'''
+        sh 'sudo /home/k8user/anaconda3/bin/dvc repro model_train'
       }
     }
 
     stage('Register Model') {
       steps {
-        sh '''/home/k8user/anaconda3/bin/dvc
- repro log_production_model'''
+        sh 'sudo /home/k8user/anaconda3/bin/dvc repro log_production_model'
       }
     }
 
