@@ -14,7 +14,7 @@ def log_production_model(config_path):
 
     mlflow.set_tracking_uri(remote_server_uri)
     # Load all runs from experiment
-    experiment_id = mlflow.get_experiment_by_name("Churn_Experiment").experiment_id
+    experiment_id = mlflow.get_experiment_by_name("Churn_mlops").experiment_id
     all_runs = mlflow.search_runs(experiment_ids=experiment_id, order_by=["metrics.accuracy DESC"])
     # Best run
     best_run_id = all_runs.iloc[0].run_id
