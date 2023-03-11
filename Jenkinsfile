@@ -43,7 +43,8 @@ pipeline {
 
     stage('Train/Test') {
       steps {
-        sh ' sudo /home/k8user/anaconda3/bin/dvc repro model_train'
+        sh ' /home/k8user/anaconda3/bin/dvc repro model_train'
+        sh 'sudo chmod -R 777 /home/k8user/Akhil/mlops/mlflow/mlruns/'
       }
     }
 
