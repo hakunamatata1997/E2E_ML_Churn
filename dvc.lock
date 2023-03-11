@@ -69,7 +69,7 @@ stages:
       md5: 469a323be44e87f1c0472483a263a163
       size: 1260384
   model_train:
-    cmd: python ./src/models/train_model.py --config=params.yaml
+    cmd: python3 ./src/models/train_model.py --config=params.yaml
     deps:
     - path: ./src/models/train_model.py
       md5: 7024d43482e79192c84c0479f6874e8e
