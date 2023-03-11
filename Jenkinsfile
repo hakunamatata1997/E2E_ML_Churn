@@ -14,15 +14,15 @@ pipeline {
 
         stage('Dependencies') {
           steps {
-            sh '''python3 -m pip install -r requirements.txt
-'''
+            sh 'python3 -m pip install -r requirements.txt'
+            sh 'python3 -m pip install joblib'
           }
         }
 
         stage('Preprocess') {
           steps {
             sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'
-            sh '''/home/k8user/anaconda3/bin/dvc repro preprocess'''
+            sh '/home/k8user/anaconda3/bin/dvc repro preprocess'
           }
         }
 
