@@ -45,7 +45,7 @@ pipeline {
 
     stage('Train/Test') {
       steps {
-        sh '/home/k8user/anaconda3/bin/dvc repro model_train'
+        sh 'sudo /home/k8user/anaconda3/bin/dvc repro model_train'
       }
     }
 
