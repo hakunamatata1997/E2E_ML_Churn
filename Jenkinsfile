@@ -2,12 +2,22 @@ pipeline {
   agent any
   stages {
     stage('Preprocessing') {
-      agent any
-      steps {
-        sh '''/home/k8user/anaconda3/bin/dvc
+      parallel {
+        stage('Data Pull') {
+          agent any
+          steps {
+            sh '''/home/k8user/anaconda3/bin/dvc
  repro raw_dataset_creation'''
-        sh '''/home/k8user/anaconda3/bin/dvc
+          }
+        }
+
+        stage('Preprocess') {
+          steps {
+            sh '''/home/k8user/anaconda3/bin/dvc
  repro preprocess'''
+          }
+        }
+
       }
     }
 
