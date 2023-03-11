@@ -12,6 +12,13 @@ pipeline {
           }
         }
 
+        stage('Dependencies') {
+          steps {
+            sh '''python3 -m pip install -r requirements.txt
+'''
+          }
+        }
+
         stage('Preprocess') {
           steps {
             sh '/home/k8user/anaconda3/bin/dvc repro preprocess'
