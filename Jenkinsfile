@@ -43,13 +43,13 @@ pipeline {
 
     stage('Train/Test') {
       steps {
-        sh 'sudo /home/k8user/anaconda3/bin/dvc repro model_train'
+        sh ' /home/k8user/anaconda3/bin/dvc repro model_train'
       }
     }
 
     stage('Register Model') {
       steps {
-        sh 'sudo /home/k8user/anaconda3/bin/dvc repro log_production_model'
+        sh '/home/k8user/anaconda3/bin/dvc repro log_production_model'
       }
     }
 
