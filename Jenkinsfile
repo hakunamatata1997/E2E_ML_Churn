@@ -6,8 +6,7 @@ pipeline {
         stage('Data Pull') {
           agent any
           steps {
-            sh '''sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/
-'''
+            sh '''sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'''
             sh '/home/k8user/anaconda3/bin/dvc repro raw_dataset_creation'
           }
         }
@@ -50,6 +49,41 @@ pipeline {
     stage('Register Model') {
       steps {
         sh '/home/k8user/anaconda3/bin/dvc repro log_production_model'
+      }
+    }
+
+    stage('Build Image') {
+      steps {
+        sh 'sudo DOCKER_BUILDKIT=1 docker build -t churn:latest . --build-arg http_proxy=http://172.30.10.43:3128 --build-arg https_proxy=http://172.30.10.43:3128'
+      }
+    }
+
+    stage('Push Image') {
+      steps {
+        sh 'sudo -S docker tag churn:latest theakhilb/mlflow_churn:latest'
+        sh 'sudo -S docker push theakhilb/mlflow_churn:latest'
+      }
+    }
+
+    stage('Deploy in Kubernetes') {
+      steps {
+        sh 'kubectl apply -f ./deployment/deployment.yaml'
+        sh 'kubectl apply -f ./deployment/service.yaml'
+      }
+    }
+
+    stage('End Points') {
+      steps {
+        sh 'echo "http://172.27.35.85:3000"'
+        sh 'kubectl apply -f ./deployment/service.yaml'
+      }
+    }
+
+    stage('Data Report') {
+      steps {
+        sh ''
+        sh 'python3 ./reports/monitor.py'
+
       }
     }
 
