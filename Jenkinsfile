@@ -77,7 +77,6 @@ pipeline {
     stage('End Points') {
       steps {
         sh 'echo "http://172.27.35.85:3000"'
-        sh 'kubectl apply -f ./deployment/service.yaml'
       }
     }
 
