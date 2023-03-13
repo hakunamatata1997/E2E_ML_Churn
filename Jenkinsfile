@@ -66,14 +66,6 @@ pipeline {
     }
 
     stage('Deploy in Kubernetes') {
-      steps {
-        kubeconfig()
-        sh 'kubectl apply -f ./deployment/deployment.yaml'
-        sh 'kubectl apply -f ./deployment/service.yaml'
-      }
-    }
-
-    stage('Apply Kubernetes files') {
       withKubeConfig([credentialsId: 'kubespec', serverUrl: 'http://172.27.35.85:6443']) {
         sh 'kubectl apply -f ./deployment/deployment.yaml'
         sh 'kubectl apply -f ./deployment/service.yaml'
