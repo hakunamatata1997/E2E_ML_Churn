@@ -67,8 +67,8 @@ pipeline {
 
     stage('Deploy in Kubernetes') {
       steps {
-        sh 'kubectl apply -f ./deployment/deployment.yaml'
-        sh 'kubectl apply -f ./deployment/service.yaml'
+        sh 'kubectl apply -f ./deployment/deployment.yaml --context kubernetes'
+        sh 'kubectl apply -f ./deployment/service.yaml --context kubernetes'
       }
     }
 
@@ -81,11 +81,8 @@ pipeline {
 
     stage('Data Report') {
       steps {
-        sh ''
         sh 'python3 ./reports/monitor.py'
-
       }
     }
-
   }
 }
