@@ -66,11 +66,13 @@ pipeline {
     }
 
     stage('Deploy in Kubernetes') {
-      withKubeConfig([credentialsId: 'kubespec', serverUrl: 'http://172.27.35.85:6443']) {
-        sh 'kubectl apply -f ./deployment/deployment.yaml'
-        sh 'kubectl apply -f ./deployment/service.yaml'
+      steps {
+        withKubeConfig([credentialsId: 'kubespec', serverUrl: 'http://172.27.35.85:6443']) {
+          sh 'kubectl apply -f ./deployment/deployment.yaml'
+          sh 'kubectl apply -f ./deployment/service.yaml'
+        }
+      }
     }
-  }
 
     stage('End Points') {
       steps {
