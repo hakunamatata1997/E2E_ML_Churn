@@ -67,11 +67,18 @@ pipeline {
 
     stage('Deploy in Kubernetes') {
       steps {
-        kubeconfig(serverUrl: 'http://172.27.35.85:6443', credentialsId: 'kubesec', caCertificate: '-----BEGIN CERTIFICATE----- MIIC/jCCAeagAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl cm5ldGVzMB4XDTIzMDIxMzEwMTgzMloXDTMzMDIxMDEwMTgzMlowFTETMBEGA1UE AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM+e SjhshmzHAj67vXScrD2sdSkHGJOqWN4S0IiUIYpjDWGBXAuaHGyi008Q0hwNs4Op QpxO/oQNc6sxwsFMXZptVgBsrl9a/4BiS10xCmw2xfBUh9sA+9FRuqsy6YSv7FXF JBynIpC1H0gn9/sZ8i1jMqHRbLmXDmR7l7I3GWPCAFklMv6TE3txMMtvOERAkHGO vAMPq4og9EbnqIG7tWOrLScyxPd23F32IkEdJUREgQTsFJuTDcQqF9ink6N01OIP 5iim9dQbDmcVkFv2f4gNUQpu+ZwBpEeYbupMmsPng7Rw8mQgVgN5dyX6aoYbermh L4IJr1eu86x1jpR0TLcCAwEAAaNZMFcwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB /wQFMAMBAf8wHQYDVR0OBBYEFAZvVV2er0urMzRQHXnAEogcZSEZMBUGA1UdEQQO MAyCCmt1YmVybmV0ZXMwDQYJKoZIhvcNAQELBQADggEBAG8uV+ai06GqZcewxLJ8 pNldv4UDNvBnnTpenSOefFffYZCafPPLpe4mpFjyruT4SNKDF86lYPehKutKf7K+ YcV+xXZvMBiXMX7pt7wLgmrGKLnDjYf8QISHfbKD6f0IDRcG0OirEYuHkdQ4XpSF hfsrhARvlk/MI5XlemjgK4tZk0VjZGyjBS5XBZ0xzV+7qHH0M6IEzSrFArvgCb/W VgIw/UNglsfs30rglFbUNaOgRtowyFeeVN6fJFSIiKq9DUvxmWhF4T2AVfFEgzMT qHyq9LJlg1T5jYQCAgL1KAMVb0q3TxmovcOA1UdyHZCng07l1Vc7z2nV+0UMjKDk tgI= -----END CERTIFICATE-----')
-        sh 'kubectl apply -f ./deployment/deployment.yaml --context kubernetes-admin@kubernetes'
-        sh 'kubectl apply -f ./deployment/service.yaml --context kubernetes-admin@kubernetes'
+        kubeconfig()
+        sh 'kubectl apply -f ./deployment/deployment.yaml'
+        sh 'kubectl apply -f ./deployment/service.yaml'
       }
     }
+
+    stage('Apply Kubernetes files') {
+      withKubeConfig([credentialsId: 'kubespec', serverUrl: 'http://172.27.35.85:6443']) {
+        sh 'kubectl apply -f ./deployment/deployment.yaml'
+        sh 'kubectl apply -f ./deployment/service.yaml'
+    }
+  }
 
     stage('End Points') {
       steps {
