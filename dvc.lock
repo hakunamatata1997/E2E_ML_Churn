@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   raw_dataset_creation:
-    cmd: python ./src/data/load_data.py --config=params.yaml
+    cmd: python3 ./src/data/load_data.py --config=params.yaml
     deps:
     - path: ./data/external/Churn_Prediction.csv
       md5: 7321aa9a1e24a9e139f42124f736b415
@@ -14,7 +14,7 @@ stages:
       md5: d9534fcf204e37ae58a7d7313ce4659c
       size: 469203
   preprocess:
-    cmd: python ./src/data/preprocess.py --config=params.yaml
+    cmd: python3 ./src/data/preprocess.py --config=params.yaml
     deps:
     - path: ./data/raw/Churn_Prediction.csv
       md5: d9534fcf204e37ae58a7d7313ce4659c
@@ -27,7 +27,7 @@ stages:
       md5: 487733dd81bed7f60072fc7a803fbf8f
       size: 400114
   split_data:
-    cmd: python ./src/data/split_data.py --config=params.yaml
+    cmd: python3 ./src/data/split_data.py --config=params.yaml
     deps:
     - path: ./data/processed/processed_data.csv
       md5: 487733dd81bed7f60072fc7a803fbf8f
@@ -43,7 +43,7 @@ stages:
       md5: c900296636fd3eb243a0d938c80750d7
       size: 320132
   optimize:
-    cmd: python ./src/models/optimization.py --config=params.yaml
+    cmd: python3 ./src/models/optimization.py --config=params.yaml
     deps:
     - path: ./data/processed/churn_test.csv
       md5: 0fc6853dea827712941c41c40d564d1f
@@ -52,8 +52,8 @@ stages:
       md5: c900296636fd3eb243a0d938c80750d7
       size: 320132
     - path: ./src/models/optimization.py
-      md5: 6f21b13f5eecd23cd6814525dd14fd9d
-      size: 3168
+      md5: dfab5eed18464dab017e005a51ece58e
+      size: 3163
   log_production_model:
     cmd: python ./src/models/model_selection.py --config=params.yaml
     deps:
