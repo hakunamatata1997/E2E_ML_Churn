@@ -78,3 +78,16 @@ stages:
       params.yaml:
         random_forest.max_depth: 6
         random_forest.n_estimators: 10
+  monitor_model:
+    cmd: python3 ./src/models/model_monitor.py --config=params.yaml
+    deps:
+    - path: ./data/raw/train_new.csv
+      md5: 9438be80f4c91ec18a7f6e31ebb1ac60
+      size: 67387
+    - path: ./src/models/model_monitor.py
+      md5: b6cabfb57942fbca0abd76623b4b5166
+      size: 1487
+    outs:
+    - path: ./reports/templates/data_and_target_drift_dashboard.html
+      md5: 25d98096cb03d4f6ee6f7a72cb26425b
+      size: 4044318
