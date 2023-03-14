@@ -76,8 +76,19 @@ pipeline {
     }
 
     stage('End Points') {
-      steps {
-        sh 'echo "http://172.27.35.85:3000"'
+      parallel {
+        stage('Monitor Cluster') {
+          steps {
+            echo 'Check the Cluster and Deployment health at http://172.27.35.85:3000'
+          }
+        }
+
+        stage('Monitor Data Drift') {
+          steps {
+            sh '/home/k8user/anaconda3/bin/dvc repro monitor_model'
+          }
+        }
+
       }
     }
 
@@ -85,6 +96,7 @@ pipeline {
       steps {
         sh 'sudo -S docker build -t churn_monitor:latest ./reports/ --build-arg http_proxy=http://172.30.10.43:3128 --build-arg https_proxy=http://172.30.10.43:3128'
         sh 'sudo -S docker run --name churn_monitor -itd -p 3600:3600 churn_monitor:latest'
+        echo 'Check Data Drift at http://172.27.35.85:3600/monitor_data'
       }
     }
 
