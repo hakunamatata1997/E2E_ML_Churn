@@ -67,10 +67,11 @@ pipeline {
 
     stage('Deploy in Kubernetes') {
       steps {
-        withKubeConfig([credentialsId: 'kube', serverUrl: 'https://172.27.35.85:6443']) {
+        withKubeConfig(credentialsId: 'kube', serverUrl: 'https://172.27.35.85:6443') {
           sh 'kubectl apply -f ./deployment/deployment.yaml'
           sh 'kubectl apply -f ./deployment/service.yaml'
         }
+
       }
     }
 
@@ -82,7 +83,8 @@ pipeline {
 
     stage('Data Report') {
       steps {
-        sh 'python3 ./reports/monitor.py'
+        sh 'sudo -S docker build -t churn_monitor:latest ./reports/ --build-arg http_proxy=http://172.30.10.43:3128 --build-arg https_proxy=http://172.30.10.43:3128'
+        sh 'sudo -S docker run --name churn_monitor -itd -p 3600:3600 churn_monitor:latest'
       }
     }
 
