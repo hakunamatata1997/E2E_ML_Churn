@@ -1,6 +1,0 @@
-artifact_location: file:///root/ChurnPrediction/mlruns/109263335159143278
-creation_time: 1678437974168
-experiment_id: '109263335159143278'
-last_update_time: 1678437974168
-lifecycle_stage: active
-name: Churn_Experiment
