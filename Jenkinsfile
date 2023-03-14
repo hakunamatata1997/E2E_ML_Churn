@@ -95,7 +95,8 @@ pipeline {
     stage('Data Report') {
       steps {
         sh 'sudo -S docker build -t churn_monitor:latest ./reports/ --build-arg http_proxy=http://172.30.10.43:3128 --build-arg https_proxy=http://172.30.10.43:3128'
-        sh 'sudo -S docker run --name churn_monitor -itd -p 3600:3600 churn_monitor:latest'
+        sh 'sudo -S docker run churn_monitor'
+        sh 'sudo -S docker cp ./reports/templates/data_and_target_drift_dashboard.html churn_monitor:/root/ChurnPrediction/templates/'
         echo 'Check Data Drift at http://172.27.35.85:3600/monitor_data'
       }
     }
