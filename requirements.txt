@@ -24,3 +24,4 @@ dvc
 pyyaml
 optuna
 joblib
+evidently
