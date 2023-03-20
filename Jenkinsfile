@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Preprocessing') {
+    stage('Data Preparation and Analysis') {
       parallel {
         stage('Data Pull') {
 
@@ -19,7 +19,6 @@ pipeline {
             sh 'python3 -m pip install joblib'
           }
         }
-
         stage('EDA') {
           steps {
             sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/raw/Churn_Prediction.csv ./data/raw/'
@@ -29,13 +28,13 @@ pipeline {
             echo 'Check Data Quality and EDA at http://172.27.35.85:3500/eda'
           }
         }
-        stage('Preprocess') {
-          steps {
-            sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/raw/Churn_Prediction.csv ./data/external/'
-            sh '/home/k8user/anaconda3/bin/dvc repro preprocess'
-          }
-        }
+      }
+    }
 
+    stage('Preprocess') {
+      steps {
+        sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/raw/Churn_Prediction.csv ./data/external/'
+        sh '/home/k8user/anaconda3/bin/dvc repro preprocess'
       }
     }
 

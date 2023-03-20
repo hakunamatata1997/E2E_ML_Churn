@@ -10,7 +10,7 @@ stages:
     cmd: python3 ./src/data/eda.py --config=params.yaml
     deps:
     - ./src/data/eda.py
-    - ./data/raw/Churn_Prediction.csv
+    - ./data/external/Churn_Prediction.csv
     outs:
     - ./reports/templates/eda_report.html
   preprocess:
