@@ -22,7 +22,6 @@ pipeline {
 
         stage('EDA') {
           steps {
-            sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'
             sh '/home/k8user/anaconda3/bin/dvc repro eda'
             sh 'sudo -S docker start churn_eda'
             sh 'sudo -S docker cp ./reports/templates/eda_report.html churn_monitor:/root/ChurnPrediction/templates/'
