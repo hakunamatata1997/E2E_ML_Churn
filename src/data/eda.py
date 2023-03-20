@@ -35,9 +35,10 @@ def eda(config_path):
     output: save train file in data/raw folder
     """
     config=read_params(config_path)
-    external_data_path=config["external_data_config"]["external_data_csv"]
+    raw_data_path = config["raw_data_config"]["raw_data_csv"]
+    # external_data_path=config["external_data_config"]["external_data_csv"]
 
-    df=load_data(external_data_path)
+    df=load_data(raw_data_path)
     # profile = ProfileReport(df, explorative=True)
     eda_report = Report(metrics=[DataQualityPreset()])
     #Saving results to a HTML file
