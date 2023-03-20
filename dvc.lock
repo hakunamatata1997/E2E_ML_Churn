@@ -91,3 +91,16 @@ stages:
     - path: ./reports/templates/data_and_target_drift_dashboard.html
       md5: 25d98096cb03d4f6ee6f7a72cb26425b
       size: 4044318
+  eda:
+    cmd: python3 ./src/data/eda.py --config=params.yaml
+    deps:
+    - path: ./data/external/Churn_Prediction.csv
+      md5: 7321aa9a1e24a9e139f42124f736b415
+      size: 674857
+    - path: ./src/data/eda.py
+      md5: 5947f7eaeaf2e1214d78e475be3e9113
+      size: 1316
+    outs:
+    - path: ./reports/templates/eda_report.html
+      md5: b1cff9675067a0ff3dbc2b92509d0254
+      size: 3398306

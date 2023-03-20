@@ -8,7 +8,9 @@ mlflow_config:
   run_name: random_forest
 model_dir: ./models/model.joblib
 model_monitor:
+  drift_score: 0.018684447131985818
   monitor_dashboard_html: ./reports/templates/data_and_target_drift_dashboard.html
+  monitor_dashboard_json: ./reports/templates/data_and_target_drift_dashboard.json
   target_col_name: target
 model_webapp_dir: webapp/model_webapp_dir/model.joblib
 processed_data_config:

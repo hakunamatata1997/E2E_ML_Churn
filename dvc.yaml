@@ -6,6 +6,13 @@ stages:
     - ./data/external/Churn_Prediction.csv
     outs:
     - ./data/raw/Churn_Prediction.csv
+  eda:
+    cmd: python3 ./src/data/eda.py --config=params.yaml
+    deps:
+    - ./src/data/eda.py
+    - ./data/external/Churn_Prediction.csv
+    outs:
+    - ./reports/templates/eda_report.html
   preprocess:
     cmd: python3 ./src/data/preprocess.py --config=params.yaml
     deps:

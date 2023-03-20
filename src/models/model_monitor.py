@@ -1,8 +1,12 @@
 import yaml
 import argparse
 import pandas as pd
-from evidently.dashboard import Dashboard
-from evidently.dashboard.tabs import DataDriftTab,CatTargetDriftTab
+import numpy as np
+
+from evidently.report import Report
+# from evidently.dashboard import Dashboard
+# from evidently.dashboard.tabs import DataDriftTab,CatTargetDriftTab
+from evidently.metric_preset import DataDriftPreset,TargetDriftPreset,DataQualityPreset
 
 def read_params(config_path):
     """
@@ -20,6 +24,7 @@ def model_monitoring(config_path):
     new_train_data_path=config["raw_data_config"]["new_train_data_csv"]
     target = config["raw_data_config"]["target"]
     monitor_dashboard_path = config["model_monitor"]["monitor_dashboard_html"]
+    monitor_dashboard_path_json= config["model_monitor"]["monitor_dashboard_json"]
     monitor_target = config["model_monitor"]["target_col_name"]
 
     ref=pd.read_csv(train_data_path)
@@ -28,9 +33,25 @@ def model_monitoring(config_path):
     ref=ref.rename(columns ={target:monitor_target}, inplace = False)
     cur=cur.rename(columns ={target:monitor_target}, inplace = False)
 
-    data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(),CatTargetDriftTab()])
-    data_and_target_drift_dashboard.calculate(ref,cur, column_mapping = None)
-    data_and_target_drift_dashboard.save(monitor_dashboard_path)
+    report = Report(metrics=[DataDriftPreset(),TargetDriftPreset()])
+    # report.run(reference_data=reference, current_data=current)
+
+    # data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(),CatTargetDriftTab()])
+    report.run(reference_data=ref, current_data=cur)
+    report.save_html(monitor_dashboard_path)
+    report.save_json(monitor_dashboard_path_json)
+
+    dp = pd.read_json(monitor_dashboard_path_json)
+    drift_score=[]
+    for column in ref.columns:
+        drift_score.append(dp['metrics'][1]['result']['drift_by_columns'][column]['drift_score'])
+    drift = np.mean(drift_score)
+    print("Drift Score:",drift)
+
+    config["model_monitor"]["drift_score"]= float(drift)
+    with open(config_path, "w") as f:
+        yaml.dump(config, f)
+
 
 if __name__=="__main__":
     args = argparse.ArgumentParser()

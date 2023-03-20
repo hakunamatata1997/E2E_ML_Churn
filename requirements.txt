@@ -25,3 +25,4 @@ pyyaml
 optuna
 joblib
 evidently
+pandas-profiling
