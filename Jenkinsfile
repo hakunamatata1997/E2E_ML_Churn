@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Preprocess') {
           steps {
-            sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/raw/external/Churn_Prediction.csv ./data/external/'
+            sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/raw/Churn_Prediction.csv ./data/external/'
             sh '/home/k8user/anaconda3/bin/dvc repro preprocess'
           }
         }
