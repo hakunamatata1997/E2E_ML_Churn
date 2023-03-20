@@ -113,14 +113,16 @@ pipeline {
     }
     stage('Retrain') {
       steps {
-        def configVal = readYaml file: "params.yaml"
-        echo "Drift Score: " + configVal["model_monitor"]["drift_score"]
-        if (configVal["model_monitor"]["drift_score"] > 5){
-          echo "Retraining the model"
-          sh '/home/k8user/anaconda3/bin/dvc repro model_train'
-        }
-        else {
-          echo 'There is no drift detected in data. Retraining is not required'
+        script {
+          def configVal = readYaml file: "params.yaml"
+          echo "Drift Score: " + configVal["model_monitor"]["drift_score"]
+          if (configVal["model_monitor"]["drift_score"] > 5){
+            echo "Retraining the model"
+            sh '/home/k8user/anaconda3/bin/dvc repro model_train'
+          }
+          else {
+            echo 'There is no drift detected in data. Retraining is not required'
+          }
         }
       }
     }
