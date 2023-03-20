@@ -1,8 +1,12 @@
 #Install the below libaries before importing
 import pandas as pd
-from pandas_profiling import ProfileReport
+# from pandas_profiling import ProfileReport
 import yaml
 import argparse
+from evidently.report import Report
+# from evidently.dashboard import Dashboard
+# from evidently.dashboard.tabs import DataDriftTab,CatTargetDriftTab
+from evidently.metric_preset import DataQualityPreset
 
 
 def read_params(config_path):
@@ -34,9 +38,11 @@ def eda(config_path):
     external_data_path=config["external_data_config"]["external_data_csv"]
 
     df=load_data(external_data_path)
-    profile = ProfileReport(df, explorative=True)
+    # profile = ProfileReport(df, explorative=True)
+    eda_report = Report(metrics=[DataQualityPreset()])
     #Saving results to a HTML file
-    profile.to_file("./reports/templates/eda_report.html")
+    eda_report.run(current_data=df,reference_data=None)
+    eda_report.save_html("./reports/templates/eda_report.html")
 
 if __name__ == "__main__":
     args = argparse.ArgumentParser()

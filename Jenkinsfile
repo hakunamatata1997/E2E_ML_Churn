@@ -4,7 +4,9 @@ pipeline {
     stage('Preprocessing') {
       parallel {
         stage('Data Pull') {
+
           agent any
+
           steps {
             sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'
             sh '/home/k8user/anaconda3/bin/dvc repro raw_dataset_creation'
@@ -18,6 +20,15 @@ pipeline {
           }
         }
 
+        stage('EDA') {
+          steps {
+            sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'
+            sh '/home/k8user/anaconda3/bin/dvc repro eda'
+            sh 'sudo -S docker start churn_eda'
+            sh 'sudo -S docker cp ./reports/templates/eda_report.html churn_monitor:/root/ChurnPrediction/templates/'
+            echo 'Check Data Quality and EDA at http://172.27.35.85:3500/eda'
+          }
+        }
         stage('Preprocess') {
           steps {
             sh 'sudo cp /home/k8user/Akhil/mlops/mlflow/ChurnPrediction/data/external/Churn_Prediction.csv ./data/external/'
@@ -100,6 +111,18 @@ pipeline {
         echo 'Check Data Drift at http://172.27.35.85:3600/monitor_data'
       }
     }
-
+    stage('Retrain') {
+      steps {
+        def configVal = readYaml file: "params.yaml"
+        echo "Drift Score: " + configVal["model_monitor"]["drift_score"]
+        if (configVal["model_monitor"]["drift_score"] > 5){
+          echo "Retraining the model"
+          sh '/home/k8user/anaconda3/bin/dvc repro model_train'
+        }
+        else {
+          echo 'There is no drift detected in data. Retraining is not required'
+        }
+      }
+    }
   }
 }
