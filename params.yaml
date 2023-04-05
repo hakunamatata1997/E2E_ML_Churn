@@ -1,5 +1,5 @@
 external_data_config:
-  external_data_csv: ./data/external/Fraud_Prediction.csv
+  external_data_csv: ./data/external/Churn_Prediction.csv
 mlflow_config:
   artifacts_dir: /home/k8user/Akhil/mlops/mlflow/mlruns
   experiment_name: Churn_mlops
