@@ -5,7 +5,9 @@ Predicting Customer Churn
 
 Pipeline
 
-![mlops](https://www.github.com/hakunamatata1997/blob/images/mlops.png)
+![Alt text](images/mlops.png "Pipeline")
+
+<!-- ![mlops](https://www.github.com/hakunamatata1997/blob/images/mlops.png) -->
 
 Project Organization
 ------------
